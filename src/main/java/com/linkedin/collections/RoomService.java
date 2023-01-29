@@ -1,29 +1,29 @@
 package com.linkedin.collections;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 public class RoomService {
 
 	private Collection<Room> inventory;
 
 	public RoomService() {
-		this.inventory = new HashSet<>();
+		this.inventory = new LinkedHashSet<>();
 	}
 	
 	public boolean hasRoom(Room room) {
 		
 	// 1. Returns a boolean that indicates if the Room Inventory contains a Room.
+		if(inventory.contains(room)) return true;
 		
-		return false;
+		else return false;
 	}
 	
 	public Room[] asArray() {
 		
 	// 2. Returns all Rooms as an Array of Rooms in the **order** they were Added.
+
 		
-		return null;
+		return inventory.toArray(new Room[0]);
 	}
 	
 	public Collection<Room> getByType(String type){
@@ -32,8 +32,13 @@ public class RoomService {
 	   3. Return a new Collection of Rooms where Room#type matches the provided String.
 		  The original Room Inventory collection MUST NOT BE MODIFIED.
 	*/
-		
-		return null;
+		Collection <Room> newInvertory = new HashSet<>();
+		inventory.forEach(a->{if(a.getType()== type){
+			newInvertory.add(a);
+		}
+		});
+
+		return newInvertory;
 		
 	}
 
