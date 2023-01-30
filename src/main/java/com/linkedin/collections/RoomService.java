@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class RoomService {
@@ -17,22 +18,42 @@ public class RoomService {
 	public void applyDiscount(final double discount) {
 		
 		//Reduces the rate of each room by the provided discount
+		inventory.forEach(r-> {
+			double rate = r.getRate();
+			//System.out.println(rate-discount);
+			r.setRate(rate - rate*discount);
+		});
 	
 	}
 
 	public Collection<Room> getRoomsByCapacity(final int requiredCapacity) {
 		
 		//Returns a new collection of rooms that meet or exceed the provided capacity
+		Collection <Room> requiredCapacityRooms = new LinkedHashSet<>();
+		inventory.forEach(r -> {
+			if(r.getCapacity()>=requiredCapacity){
+				requiredCapacityRooms.add(r);
+			}
+		});
 		
-		return null;
+		return requiredCapacityRooms;
 		
 	}
 	
 	public Collection<Room> getRoomByRateAndType(final double rate, final String type){
 	
 		//Returns a new collection of rooms with a rate below the provided rate and that match the provided type
-		
-		return null;
+
+		//Collection <Room> rateTypeRooms = new HashSet<>();
+		//method-1 using for each
+//		inventory.forEach(r->{
+//			if(r.getRate()<rate && r.getType().equals(type)) rateTypeRooms.add(r);
+//		});
+		//method 2 using streams.
+		Collection <Room> rateTypeRooms = inventory.stream()
+				.filter(r->r.getRate()<rate)
+				.filter(r->r.getType().equals(type)).collect(Collectors.toList() );
+		return rateTypeRooms;
 		
 	}
 	
