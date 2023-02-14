@@ -1,7 +1,8 @@
 package com.linkedin.collections;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GuestService {
 
@@ -14,8 +15,11 @@ public class GuestService {
 		 *  who have indicated the provided room as the first preference in their preferred
 		 *  room list. 
 		 */
-		
-		return null; 
+		List <Guest> favRoomVsProvidedRoom = new ArrayList<>();
+		favRoomVsProvidedRoom = guests.stream()
+				.filter(g -> g.getPreferredRooms().indexOf(room) == 0)
+				.collect(Collectors.toList());
+		return favRoomVsProvidedRoom;
 
 	}
 
@@ -26,6 +30,24 @@ public class GuestService {
 		 *  ahead of those guests not in the program. Otherwise, guests are arranged in the
 		 *  order they were inserted.
 		 */
+		if(guest.isLoyaltyProgramMember()){
+
+			if(checkinList.isEmpty()){
+				checkinList.add(guest);
+			}else {
+				int index=0;
+				for (Guest g: checkinList) {
+					if (!g.isLoyaltyProgramMember()){
+						index =checkinList.indexOf(g);
+						break;
+					}
+				}
+				checkinList.add(index, guest);
+			}
+
+		}else{
+			checkinList.add(guest);
+		}
 
 	}
 	
@@ -34,7 +56,13 @@ public class GuestService {
 		/*
 		 *  3.  Swaps the position of the two provided guests within the checkinList.
 		 *  If guests are not currently in the list no action is required.
-		 */ 
+		 */
+		int index1 = checkinList.indexOf(guest1);
+		int index2 = checkinList.indexOf(guest2);
+		if(checkinList.containsAll(List.of(guest1,guest2))){
+			checkinList.set(index1, guest2);
+			checkinList.set(index2,guest1);
+		}
 
 	}
 
