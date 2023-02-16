@@ -17,8 +17,11 @@ public class BookingService {
 		 * Returns a boolean that indicates if the Guest was
 		 * successfully placed in the room.
 		 */
-		
-		return false;
+
+			Guest g = bookings.putIfAbsent(room, guest);
+			if(g == null) return true;
+
+			else return false;
 	}
 
 	public double totalRevenue() {
@@ -27,7 +30,13 @@ public class BookingService {
 		 * 2. Returns a double that totals the rate of each Room booked
 		 * in the bookings Map.
 		 */
-		return 0;
+
+		double total = 0;
+		for (Map.Entry<Room, Guest> i: bookings.entrySet()
+			 ) {
+			total+= i.getKey().getRate();
+		}
+		return total;
 	}
 	
 	public Map<Room, Guest> getBookings() {
